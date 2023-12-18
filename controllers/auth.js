@@ -1,6 +1,5 @@
 // Para no perder intellisense declarar nuevamente express y agregar el valor por defecto "response" a "res" de las funcines
 const { response } = require('express');
-const { validationResult } = require('express-validator');
 
 const crearUsuario = ( req, res = response ) => {
 
@@ -16,18 +15,6 @@ const crearUsuario = ( req, res = response ) => {
   //   })
   // }
 
-  // Manejo de errores con "express-validator"
-  const errors = validationResult( req );
-
-  if ( !errors.isEmpty() ) {
-
-    return res.status( 400 ).json({
-      ok: false,
-      errors: errors.mapped()
-    })
-
-  }
-
   res.json({
     ok: true,
     msg: 'registro',
@@ -40,27 +27,7 @@ const crearUsuario = ( req, res = response ) => {
 
 const loginUsuario = ( req, res = response ) => {
 
-  const errors = validationResult( req );
-
-  if ( !errors.isEmpty() ) {
-
-    return res.status( 400 ).json({
-      ok: false,
-      errors: errors.mapped()
-    })
-
-  }
-
   const { email, password } = req.body;
-
-  if ( !errors.isEmpty() ) {
-
-    return res.status( 400 ).json({
-      ok: false,
-      errors: errors.mapped()
-    })
-
-  }
 
   res.json({
     ok: true,
