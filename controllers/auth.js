@@ -1,9 +1,8 @@
 // Para no perder intellisense declarar nuevamente express y agregar el valor por defecto "response" a "res" de las funcines
 const { response } = require('express');
+const Usuario = require('../models/Usuario');
 
-const crearUsuario = ( req, res = response ) => {
-
-  const { name, email, password } = req.body;
+const crearUsuario = async ( req, res = response ) => {
 
   // 400 es el "status code"
   // Para mas informacion: https://www.restapitutorial.com/httpstatuscodes.html
@@ -15,13 +14,32 @@ const crearUsuario = ( req, res = response ) => {
   //   })
   // }
 
-  res.json({
-    ok: true,
-    msg: 'registro',
-    name,
-    email,
-    password
-  })
+  // const { name, email, password } = req.body;
+
+  try {
+
+
+    const usuario = new Usuario( req.body );
+
+    await usuario.save();
+
+    res.status( 201 ).json({
+      ok: true,
+      msg: 'registro'
+    })
+
+  } catch ( error ) {
+
+    console.log( error );
+
+    res.status( 500 ).json({
+      ok: false,
+      msg: 'Por favor hable con el administrador'
+    })
+
+  }
+
+
 
 }
 
