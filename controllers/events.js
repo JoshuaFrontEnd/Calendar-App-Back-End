@@ -35,11 +35,14 @@ const createEvent = async ( req, res = response ) => {
 }
 
 // Read
-const readEvent = ( req, res = response ) => {
+const readEvent = async ( req, res = response ) => {
+
+  const eventos = await Evento.find().populate( 'user','name' );
 
   res.json({
     ok: true,
-    msg: 'readEvent'
+    eventos
+
   })
 
 }
