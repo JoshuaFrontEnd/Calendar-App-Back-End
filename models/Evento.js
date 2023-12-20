@@ -5,24 +5,32 @@ const EventoSchema = Schema({
 
   title: {
     type: String,
-    require: true
+    required: true
   },
   notes: {
     type: String,
   },
   start: {
     type: Date,
-    require: true
+    required: true
   },
   end: {
     type: Date,
-    require: true
+    required: true
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'Usuario'
+    ref: 'Usuario',
+    required: true
   }
 
+})
+
+// Modificando el esquema para quitar la informacion "__v" y reemplazar "_id" por "id", esto no cambia en la base de datos, solo al visualizar la informacion en formato JSON
+EventoSchema.method('toJSON', function(){
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
 })
 
 module.exports = model('Evento', EventoSchema );
