@@ -6,7 +6,7 @@ Proyecto en Node para poner en practica los siguientes conceptos:
 - Express
 - Mongoose
 - Modelos
-- Controllers
+- Controladores
 - Middlewares de Express
 - JWT
 - Autenticación pasiva
@@ -16,5 +16,7 @@ Proyecto en Node para poner en practica los siguientes conceptos:
 - CORS
 - Revalidar tokens
 - MongoDB
-- MongoAtlas
-- MongoCompass
+- Mongo Atlas
+- Mongo Compass
+- CRUD
+- Validaciones automáticas y personalizadas
