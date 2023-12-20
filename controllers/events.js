@@ -48,12 +48,53 @@ const readEvent = async ( req, res = response ) => {
 }
 
 // Update
-const updateEvent = ( req, res = response ) => {
+const updateEvent = async ( req, res = response ) => {
 
-  res.json({
-    ok: true,
-    msg: 'updateEvent'
-  })
+  // Obteniendo el id que viene en la url
+  const eventoId = req.params.id;
+  const uid = req.uid;
+
+  try {
+
+    const evento = await Evento.findById( eventoId );
+
+    if ( !evento ) {
+      res.status( 404 ).json({
+        ok: false,
+        msg: 'No existe evento con ese id'
+      });
+    }
+
+    if ( evento.user.toString() !== uid) {
+      res.status( 401 ).json({
+        ok: false,
+        msg: 'No tiene privilegios para editar este evento'
+      });
+    }
+
+    const nuevoEvento = {
+      ...req.body,
+      user: uid
+    }
+
+    // Acá actualizo el evento en la base de datos y el argumento "{ new: true }" es para que se vea en tiempo real la actualización en postman
+    const eventoActualizado = await Evento.findByIdAndUpdate( eventoId, nuevoEvento, { new: true } );
+
+    res.json({
+      ok: true,
+      evento: eventoActualizado
+    });
+
+
+  } catch ( error ) {
+
+    console.log( error );
+    res.status( 500 ).json({
+      ok: false,
+      msg: 'Hable con el administrador'
+    });
+
+  }
 
 }
 
