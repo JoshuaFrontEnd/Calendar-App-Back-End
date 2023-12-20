@@ -59,14 +59,14 @@ const updateEvent = async ( req, res = response ) => {
     const evento = await Evento.findById( eventoId );
 
     if ( !evento ) {
-      res.status( 404 ).json({
+      return res.status( 404 ).json({
         ok: false,
         msg: 'No existe evento con ese id'
       });
     }
 
     if ( evento.user.toString() !== uid) {
-      res.status( 401 ).json({
+      return res.status( 401 ).json({
         ok: false,
         msg: 'No tiene privilegios para editar este evento'
       });
@@ -99,12 +99,47 @@ const updateEvent = async ( req, res = response ) => {
 }
 
 // Delete
-const deleteEvent = ( req, res = response ) => {
+const deleteEvent = async ( req, res = response ) => {
 
-  res.json({
-    ok: true,
-    msg: 'deleteEvent'
-  })
+  // Obteniendo el id que viene en la url
+  const eventoId = req.params.id;
+  const uid = req.uid;
+
+  try {
+
+    const evento = await Evento.findById( eventoId );
+
+    if ( !evento ) {
+      return res.status( 404 ).json({
+        ok: false,
+        msg: 'No existe evento con ese id'
+      });
+    }
+
+    if ( evento.user.toString() !== uid) {
+      return res.status( 401 ).json({
+        ok: false,
+        msg: 'No tiene privilegios para eliminar este evento'
+      });
+    }
+
+    // Acá actualizo el evento en la base de datos y el argumento "{ new: true }" es para que se vea en tiempo real la actualización en postman
+    await Evento.findByIdAndDelete( eventoId );
+
+    res.json({
+      ok: true
+    });
+
+
+  } catch ( error ) {
+
+    console.log( error );
+    res.status( 500 ).json({
+      ok: false,
+      msg: 'Hable con el administrador'
+    });
+
+  }
 
 }
 
